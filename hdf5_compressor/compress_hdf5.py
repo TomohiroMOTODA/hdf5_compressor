@@ -126,9 +126,9 @@ def main(args):
     image_quality = args["quality"]
     nproc       = args["nproc"]
     episodes = glob.glob(os.path.join(dataset_dir, '*.hdf5'), recursive=True)
-    episodes_001 = glob.glob(os.path.join(dataset_dir, 'HDF5', '*.hdf5'), recursive=True)
+    # episodes_001 = glob.glob(os.path.join(dataset_dir, 'HDF5', '*.hdf5'), recursive=True)
     episodes_002 = glob.glob(os.path.join(dataset_dir, 'hdf5', '*.hdf5'), recursive=True)
-    episodes = episodes+episodes_001+episodes_002
+    episodes = episodes+episodes_002
     print (f'Load:{dataset_dir}')
     print (f'Size: {len(episodes)} episodes')
     
