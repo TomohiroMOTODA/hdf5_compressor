@@ -29,7 +29,10 @@ for t in "${TASK_LIST[@]}"; do
     dir_name=$(basename "$dir")
     echo "Processing directory: $dir_name"
 
-    python -m hdf5_compressor.compress_hdf5 --compress --dataset_dir ./data/sample --output_dir ./data --nproc 5 --quality 50 
+    output_dir="$SAVE_FOLDER/$dir_name"
+    mkdir -p "$output_dir"
+
+    python -m hdf5_compressor.compress_hdf5 --compress --dataset_dir "$dir" --output_dir "$output_dir" --nproc 5 --quality 50 
     
     if [ $? -eq 0 ]; then
         echo "Data saved for $dir_name in $output_dir"
