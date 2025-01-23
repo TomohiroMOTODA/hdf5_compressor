@@ -16,3 +16,8 @@ python -m hdf5_compressor.compress_hdf5_rs --compress --dataset_dir <path to dat
 ```console
 python -m hdf5_compressor.visualize_hdf5 --compressed --dataset_dir <> --episode_idx 0
 ```
+
+### Dependency
+- conda install anaconda::h5py
+- conda install -c conda-forge cv2
+- Torch >= 2.4
