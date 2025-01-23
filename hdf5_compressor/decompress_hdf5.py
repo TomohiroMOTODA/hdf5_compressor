@@ -27,13 +27,14 @@ def load_compressed_hdf5(dataset_path):
         for cam_name in root[f'/observations/images/'].keys():
             # decode images
             emc_images = root[f'/observations/images/{cam_name}'][()]
+            image_dict[cam_name] = list()
             for img in emc_images:
                 decompressed_image = cv2.imdecode(img , 1)
                 image_dict[cam_name].append(decompressed_image)
     return is_sim, qpos, qvel, effort, action, image_dict
 
 def save_hdf5(file_info):
-    episode_path, output_dir, is_compress, image_quality = file_info
+    episode_path, output_dir = file_info
 
     print (f'Load {episode_path}')
     try:
@@ -64,7 +65,7 @@ def save_hdf5(file_info):
         t0 = time.time()
         with h5py.File(out_path, 'w', rdcc_nbytes=1024**2*2) as root:
             root.attrs['sim'] = is_sim
-            root.attrs['compress'] = is_compress
+            root.attrs['compress'] = False
             obs = root.create_group('observations')
             image = obs.create_group('images')
             for cam_name in CAMERA_NAMES:
@@ -85,15 +86,13 @@ def save_hdf5(file_info):
 def main(args):
     dataset_dir   = args["dataset_dir"]
     output_dir    = args["output_dir"]
-    is_compress   = args["compress"]
-    image_quality = args["quality"]
     nproc         = args["nproc"]
     episodes = glob.glob(os.path.join(dataset_dir, '*.hdf5'), recursive=True)
     print (f'Load:{dataset_dir}')
     print (f'Size: {len(episodes)} episodes')
     
     pool = Pool(nproc)
-    pool.map(save_hdf5, [(episode, output_dir, is_compress, image_quality) for episode in  episodes])
+    pool.map(save_hdf5, [(episode, output_dir) for episode in  episodes])
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
