@@ -25,5 +25,8 @@ share/python-wheels/
 MANIFEST
 
 *.mkv
-*.csv
+#*.csv
 *.pdf
+
+
+tests
