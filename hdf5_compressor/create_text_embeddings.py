@@ -1,5 +1,13 @@
 '''
+* ``Author``: Tomohiro MOTODA
+* ``Organization``: AIST
 
+* Usage
+  ```console
+  $ python -m hdf5_compressor.create_text_embeddings
+  ```
+  It outputs text_embeddings.npy at ./static (overlapped), loading ./static/feature.csv.
+  When you add something new int the database, describe the task meta infomation at feature.csv (please follow feature.cvs)
 '''
 import os
 import pandas as pd
