@@ -7,6 +7,9 @@ import glob
 import argparse
 from multiprocessing import Pool
 
+import psutil
+import gc
+
 ## CONSTANTS
 CAMERA_NAMES = ["cam_high", "cam_left_wrist", "cam_low", "cam_right_wrist"]
 DCAMERA_NAMES = ["dcam_high", "dcam_low"]
@@ -19,6 +22,9 @@ def load_compressed_hdf5(info):
         exit()
 
     dst_path = os.path.join(output_dir, os.path.basename(dataset_path))
+
+    process = psutil.Process()
+    print (f"Copy and Decomp: {dataset_path}, {process.memory_info().rss / 1024 **2:.2f} MB")
 
     with h5py.File(dataset_path, 'r') as root,  h5py.File(dst_path, 'w') as dst:
 
@@ -39,6 +45,7 @@ def load_compressed_hdf5(info):
 
         image_dict = dict()
         data_dict = dict()
+        
         for cam_name in CAMERA_NAMES:
             data_dict[f'/observations/images/{cam_name}'] = []
 
@@ -54,9 +61,16 @@ def load_compressed_hdf5(info):
                                          chunks=(1, 480, 640, 3), )
             data_dict[f'/observations/images/{cam_name}'] = image_dict[cam_name]
 
+
+        dst.attrs['compresse'] = False
         for name , array in data_dict.items():
             dst[name][...] = array
 
+        del root
+        del dst
+    gc.collect()
+        
+            
 def save_hdf5(file_info):
     raise NotImplementedError("This function is not implemented in this script.")
 
