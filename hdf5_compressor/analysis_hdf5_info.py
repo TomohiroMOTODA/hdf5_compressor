@@ -10,7 +10,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     is_shown = False
-    data = glob.glob(os.path.join(args.data_dir, "**/*.hdf5"), recursive=True)
+    data = glob.glob(os.path.join(args.data_dir, "/**/*.hdf5"), recursive=True)
     if not data:
         print("No HDF5 files found in the specified directory.")
         exit(1)    
